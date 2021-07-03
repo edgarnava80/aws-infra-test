@@ -1,21 +1,17 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: CI/CD pipeline to test infra creation with cloudformation
-
 Parameters:
   GitHubOwner:
     Type: String
-    AllowedPattern: "[A-Za-z0-9-]+"
+    AllowedPattern: '[A-Za-z0-9-]+'
     Default: edgarnava80
-
   GitHubRepository:
     Type: String
-    AllowedPattern: "[A-Za-z0-9-]+"
-
+    AllowedPattern: '[A-Za-z0-9-]+'
   GitHubBranch:
     Type: String
-    AllowedPattern: "[A-Za-z0-9-]+"
+    AllowedPattern: '[A-Za-z0-9-]+'
     Default: master
-
 Resources:
   CodeBuildServiceRole:
     Type: 'AWS::IAM::Role'
@@ -64,7 +60,8 @@ Resources:
                 Action:
                   - 'codebuild:BatchGetBuilds'
                   - 'codebuild:StartBuild'
-                Resource: '*'
+                Resource:
+                  - '*'
                 Effect: Allow
   CodeBuildSourceCredential:
     Type: 'AWS::CodeBuild::SourceCredential'
@@ -92,10 +89,12 @@ Resources:
       Triggers:
         Webhook: true
         FilterGroups:
-            - - Type: EVENT
-                Pattern: PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED, PULL_REQUEST_REOPENED
-              - Type: BASE_REF
-                Pattern: !Sub ^refs/heads/${GitHubBranch}$
+          - - Type: EVENT
+              Pattern: >-
+                PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED,
+                PULL_REQUEST_REOPENED
+            - Type: BASE_REF
+              Pattern: !Sub '^refs/heads/${GitHubBranch}$'
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -143,6 +142,13 @@ Resources:
                   - 's3:GetBucketLocation'
                 Resource:
                   - '*'
+              - Sid: CodeBuildPolicy
+                Action:
+                  - 'codebuild:BatchGetBuilds'
+                  - 'codebuild:StartBuild'
+                Resource:
+                  - '*'
+                Effect: Allow
   CodePipelineArtifactStore:
     Type: 'AWS::S3::Bucket'
     Properties:
