@@ -5,6 +5,7 @@ phases:
     commands:
       - echo Entered the build phase...
       - echo Build started on `date`
+      - aws iam list-account-aliases --query "AccountAliases" --output text
 
 artifacts:
   files:
