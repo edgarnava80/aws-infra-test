@@ -6,6 +6,8 @@ phases:
       - echo Entered the build phase...
       - echo Build started on `date`
       #- aws iam list-account-aliases --query "AccountAliases" --output text
+      #- aws cloudformation deploy --stack-name aws-infra-test-cicd --template-file pipeline.yml --capabilities CAPABILITY_IAM --parameter-overrides GitHubRepository=aws-infra-test
+      - aws cloudformation deploy --stack-name aws-infra-test --template-file cloudformation.yml --capabilities CAPABILITY_IAM --parameter-overrides
 
 artifacts:
   files:
