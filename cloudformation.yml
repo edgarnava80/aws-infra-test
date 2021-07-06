@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template creates an S3 bucket
+
+Parameters:
+  AWSEnvironment:
+    Type: String
+    AllowedPattern: '[A-Za-z0-9-]+'
+    Default: dev
+
+Resources:
+  DRSEAPIEdocsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Sub "drs-eapi-base-infra-edocs-bucket-{AWSEnvironment}"
